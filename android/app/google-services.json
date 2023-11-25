@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "135415229642",
+    "project_id": "inventario-ibp-2b71d",
+    "storage_bucket": "inventario-ibp-2b71d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:135415229642:android:c3889b49650c88b65e9833",
+        "android_client_info": {
+          "package_name": "com.example.inventario_ibp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "135415229642-95hgnrcqm6dobo84mf8gifs6i5vnhe35.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXiu_KjCB2hUN4zCBzAynHgVTzfS7FH4M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "135415229642-95hgnrcqm6dobo84mf8gifs6i5vnhe35.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "135415229642-eqiv5bku3tjv6jag14gm2q0ljjc60l7c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.inventarioIbp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
