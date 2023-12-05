@@ -40,11 +40,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         _actionButton = 'Login';
         _toggleButton = 'Ainda não tem conta? Cadastre-se agora.';
         _passwordConfirmVisivel = false;
+        _showPassword = false;
       } else {
         _title = 'Crie sua conta';
         _actionButton = 'Cadastrar';
         _toggleButton = 'Voltar ao Login.';
         _passwordConfirmVisivel = true;
+        _showPassword = false;
+        _password.clear();
+        
       }
     });
   }
@@ -156,7 +160,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     validator: Validatorless.multiple([
                       Validatorless.required('Senha Obrigatório'),
                       Validatorless.min(
-                      8, 'Senha precisa ter pelo menos 8 caracteres'),
+                          8, 'Senha precisa ter pelo menos 8 caracteres'),
                       (value) {
                         if (!contemNumeros(value.toString())) {
                           return 'Pelo menos um número';
@@ -182,26 +186,26 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       controller: _passwordConfirm,
                       obscureText: _showPassword == false ? true : false,
                       decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          labelText: 'Confirme Senha',
-                          suffixIcon: GestureDetector(
-                        child: Icon(
-                          _showPassword == false
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: Colors.white,
-                        ),
-                        onTap: () {
-                          setState(() {
-                            _showPassword = !_showPassword;
-                          });
-                        },
-                      ),
+                        border: const OutlineInputBorder(),
+                        labelText: 'Confirme Senha',
+                        suffixIcon: GestureDetector(
+                          child: Icon(
+                            _showPassword == false
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: Colors.white,
                           ),
+                          onTap: () {
+                            setState(() {
+                              _showPassword = !_showPassword;
+                            });
+                          },
+                        ),
+                      ),
                       validator: Validatorless.multiple([
                         Validatorless.required('Senha Obrigatório'),
                         Validatorless.min(
-                        8, 'Senha precisa ter pelo menos 8 caracteres'),
+                            8, 'Senha precisa ter pelo menos 8 caracteres'),
                         (value) {
                           if (!contemNumeros(value.toString())) {
                             return 'Pelo menos um número';
@@ -221,7 +225,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     ),
                   ),
                 ),
-
                 Visibility(
                   visible: !_passwordConfirmVisivel,
                   child: Container(

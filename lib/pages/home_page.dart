@@ -68,7 +68,7 @@ class _HomepageState extends State<Homepage> {
         child: ListView(
           children: [
             ListTile(
-              title: const Text('Configurações'),
+              title: const Text('Informações'),
               onTap: () {
                 context.go('/settings');
               },
