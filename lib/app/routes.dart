@@ -41,7 +41,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/settings',
-        builder: (BuildContext context, GoRouterState state) {
+        builder: (BuildContext context, GoRouterState state) {          
           return const SettingsPage();
         },
       ),

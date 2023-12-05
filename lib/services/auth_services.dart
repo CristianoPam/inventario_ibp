@@ -69,7 +69,7 @@ class AuthService extends ChangeNotifier {
 
   createUser(String email, String pass) async {
     try {
-      await _auth.createUserWithEmailAndPassword(email: email, password: pass);
+      await _auth.createUserWithEmailAndPassword(email: email, password: pass,);
       await _getUser();
       await userData!.sendEmailVerification();
     } on FirebaseAuthException catch (e) {

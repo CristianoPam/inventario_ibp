@@ -29,18 +29,7 @@ class _HomepageState extends State<Homepage> {
 
   @override
   void initState() {
-    // streamSubscription = _firebaseAuth.authStateChanges().listen((User? user) {
-    //   if (user == null) {
-    //     Navigator.pushAndRemoveUntil(
-    //       context,
-    //       MaterialPageRoute(
-    //         builder: (_) => const ChecagemPage(),
-    //       ),
-    //       (context) => false,
-    //     );
-    //   }
-    // });
-    super.initState();
+        super.initState();
   }
 
   @override

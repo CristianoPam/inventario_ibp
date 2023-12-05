@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:inventario_ibp/pages/home_page.dart';
-import 'package:inventario_ibp/pages/settings_page.dart';
+
+
+import 'settings_page.dart';
 
 class Pages extends StatefulWidget {
   const Pages({Key? key}) : super(key: key);
@@ -61,9 +63,8 @@ class _PagesState extends State<Pages> {
           child: Text(
             'Relatórios 📗',
           ),
-        ),
-        const SettingsPage(
-        ),
+        ),        
+        const SettingsPage(),
       ][currentPageIndex],
     );
   }
