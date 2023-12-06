@@ -150,7 +150,7 @@ class AuthService extends ChangeNotifier {
     try {
       final userCreds = EmailAuthProvider.credential(
         email: _auth.currentUser!.email!,
-        password: '123456',
+        password: 'Cristiano@123',
       );
       // É necessário usar o método reauthenticate para confirmar a alteração.
       await _auth.currentUser!.reauthenticateWithCredential(userCreds);

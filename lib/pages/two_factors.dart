@@ -34,15 +34,16 @@ class _TwoFactorsState extends ConsumerState<TwoFactors> {
           Padding(
             padding: const EdgeInsets.only(top: 24),
             child: TextFormField(
-              controller: numberPhone,
+              // controller: numberPhone,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Celular',
               ),
+              initialValue: phoneNumber,
             ),
           ),
           TextButton(
-            onPressed: () => Navigator.of(context).pop(numberPhone.text),
+            onPressed: () => Navigator.of(context).pop(phoneNumber),
             child: const Text('Ativar'),
           )
         ],
@@ -51,7 +52,7 @@ class _TwoFactorsState extends ConsumerState<TwoFactors> {
 
     await ref
         .read(authServiceProvider)
-        .enableTwoFactor(numberPhone.text, readSmsCode);
+        .enableTwoFactor(phoneNumber, readSmsCode);
   }
 
   Future<String> readSmsCode() async {
@@ -79,10 +80,12 @@ class _TwoFactorsState extends ConsumerState<TwoFactors> {
       ),
     );
   }
-    
+
   @override
   Widget build(BuildContext context) {
-    final enabled = ref.watch(authServiceProvider).isMultiFactorEnabled;    
+    final enabled = ref.watch(authServiceProvider).isMultiFactorEnabled;
+   
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Configurações'),
@@ -94,7 +97,7 @@ class _TwoFactorsState extends ConsumerState<TwoFactors> {
         ],
       ),
       body: Column(
-        children: [          
+        children: [
           const SizedBox(height: 7),
           const Text(
             'Cadastre um autenticador de \n verificação  em duas etapas',
@@ -121,7 +124,7 @@ class _TwoFactorsState extends ConsumerState<TwoFactors> {
                   margin: const EdgeInsets.all(20),
                   child: Center(
                     child: SwitchListTile(
-                      value: enabled,
+                      value:  enabled,
                       onChanged: (val) => !enabled
                           ? enableTwoFactor(context, val)
                           : ref.read(authServiceProvider).disableTwoFactor(),
