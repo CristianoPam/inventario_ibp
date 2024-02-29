@@ -64,6 +64,8 @@ class _HomepageState extends State<Homepage> {
           ),
         ],
       ),
+
+/*   //MENU LATERAL
       drawer: Drawer(
         child: ListView(
           children: [
@@ -76,6 +78,8 @@ class _HomepageState extends State<Homepage> {
           ],
         ),
       ),
+*/
+
       body: StreamBuilder<QuerySnapshot>(
         stream: patrimonios,
         builder: (context, snapshot) {
