@@ -21,14 +21,11 @@ supportedLocales: const [Locale('pt', 'BR')],
       theme: ThemeData(
           // fontFamily: 'COMIC',
           useMaterial3: true,
-          scaffoldBackgroundColor: const Color.fromARGB(255, 231, 219, 219),
-          primarySwatch: Colors.blue,
-          textTheme: const TextTheme(
-            displayMedium: TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-            ),
-          ),
+            
+          colorScheme: ColorScheme.fromSwatch( 
+            backgroundColor:Colors.white               
+              ),
+
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(

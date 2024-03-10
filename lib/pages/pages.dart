@@ -35,11 +35,7 @@ class _PagesState extends State<Pages> {
             icon: Icon(Icons.home_outlined),
             label: 'Patrimônios',
           ),
-          NavigationDestination(
-            selectedIcon: Icon(Icons.person),
-            icon: Icon(Icons.person_outline),
-            label: 'Perfil',
-          ),
+         
           NavigationDestination(
             selectedIcon: Icon(Icons.assessment),
             icon: Icon(Icons.assessment),
@@ -54,11 +50,11 @@ class _PagesState extends State<Pages> {
       ),
       body: <Widget>[
         const Homepage(),
-        const Center(
-          child: Text(
-            'Perfil 👨‍🏫 ',
-          ),
-        ),
+        // const Center(
+        //   child: Text(
+        //     'Perfil 👨‍🏫 ',
+        //   ),
+        // ),
         const Center(
           child: Text(
             'Relatórios 📗',

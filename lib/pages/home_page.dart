@@ -1,10 +1,7 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:inventario_ibp/Patrimonio.dart';
-import 'package:inventario_ibp/checagem_page.dart';
 import 'package:inventario_ibp/pages/patrimonio_page.dart';
 import 'cadastrar_page.dart';
 
@@ -18,18 +15,18 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   bool saved = false;
 
-  final _firebaseAuth = FirebaseAuth.instance;
+  // final _firebaseAuth = FirebaseAuth.instance;
 
-  void signUserOut() async {
-    await _firebaseAuth.signOut();
-    context.go('/login');
-  }
+  // void signUserOut() async {
+  //   await _firebaseAuth.signOut();
+  //   context.go('/login');
+  // }
 
   StreamSubscription? streamSubscription;
 
   @override
   void initState() {
-        super.initState();
+    super.initState();
   }
 
   @override
@@ -47,39 +44,18 @@ class _HomepageState extends State<Homepage> {
     // FirebaseAuth.instance.signOut();
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
               context, MaterialPageRoute(builder: (_) => NovoPatrimonioPage()));
         },
-        child: const Icon(Icons.add_task),
+        label: const Text('Adicionar'),
+        icon: const Icon(Icons.add_task),
       ),
       appBar: AppBar(
         title: Image.asset('assets/images/logo.png', height: 50, width: 50),
         centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: signUserOut,
-            icon: const Icon(Icons.exit_to_app),
-          ),
-        ],
       ),
-
-/*   //MENU LATERAL
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            ListTile(
-              title: const Text('Informações'),
-              onTap: () {
-                context.go('/settings');
-              },
-            )
-          ],
-        ),
-      ),
-*/
-
       body: StreamBuilder<QuerySnapshot>(
         stream: patrimonios,
         builder: (context, snapshot) {
@@ -103,10 +79,6 @@ class _HomepageState extends State<Homepage> {
                         builder: (_) => PatrimonioPage(patrimonio: patrimonio),
                       ),
                     );
-                  },
-                  onLongPress: () {
-                    _dialogBuilder(
-                        context: context, id: snapshot.data!.docs[index].id);
                   },
                   leading: Container(
                     width: 90,
@@ -132,47 +104,6 @@ class _HomepageState extends State<Homepage> {
               });
         },
       ),
-    );
-  }
-
-  Future<void> _dialogBuilder(
-      {required BuildContext context, required String id}) {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Excluir Patrimonio'),
-          content: const Text(
-            'Ao fazer isso, não será mais possível restaurar o Patrimonio!',
-          ),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('Cancelar'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('Apagar'),
-              onPressed: () {
-                FirebaseFirestore.instance
-                    .collection('patrimonios')
-                    .doc(id)
-                    .delete()
-                    .then((value) {
-                  Navigator.pop(context);
-                });
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }

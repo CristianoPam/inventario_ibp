@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:inventario_ibp/constants.dart';
 import 'package:inventario_ibp/pages/two_factors.dart';
 import 'package:inventario_ibp/widget/avatar_card.dart';
@@ -15,6 +17,13 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  final _firebaseAuth = FirebaseAuth.instance;
+
+  void signUserOut() async {
+    await _firebaseAuth.signOut();
+    context.go('/login');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -189,7 +198,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ],
                     ),
-                    // RESERVADO
+
+                    // SAIR DO APLICATIVO
                     Row(
                       children: [
                         Container(
@@ -201,22 +211,17 @@ class _SettingsPageState extends State<SettingsPage> {
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: GestureDetector(
-                            child: const Icon(CupertinoIcons.heart_fill,
-                                color: kprimaryColor),
+                            child: const Icon(
+                                IconData(0xf031, fontFamily: 'MaterialIcons')),
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const UnderConstruction(),
-                                ),
-                              );
+                             _firebaseAuth.signOut(); 
+                              
                             },
                           ),
                         ),
                         const SizedBox(width: 10),
                         const Text(
-                          'Reservado',
+                          'Sair',
                           style: TextStyle(
                             color: kprimaryColor,
                             fontSize: ksmallFontSize,
@@ -230,12 +235,8 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: Colors.grey.shade600,
                           ),
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const UnderConstruction(),
-                              ),
-                            );
+                            //carregar para sair
+                            _firebaseAuth.signOut();
                           },
                         ),
                       ],
