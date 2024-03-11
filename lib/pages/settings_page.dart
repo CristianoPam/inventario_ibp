@@ -214,7 +214,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             child: const Icon(
                                 IconData(0xf031, fontFamily: 'MaterialIcons')),
                             onTap: () {
-                             _firebaseAuth.signOut(); 
+                             _dialogBuilderExit; 
                               
                             },
                           ),
@@ -236,7 +236,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                           onTap: () {
                             //carregar para sair
-                            _firebaseAuth.signOut();
+                            _dialogBuilderExit;
                           },
                         ),
                       ],
@@ -262,6 +262,42 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
+    );
+  }
+
+  // verificar o contexto para qual patromônio vai ser excluido
+  Future<void> _dialogBuilderExit(
+      {required BuildContext context, required String id}) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Excluir Patrimônio'),
+          content: const Text(
+            'Ao fazer isso, não será mais possível restaurar o Patrimonio!',
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Apagar'),
+              onPressed: () {
+               
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
