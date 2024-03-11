@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -214,7 +216,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             child: const Icon(
                                 IconData(0xf031, fontFamily: 'MaterialIcons')),
                             onTap: () {
-                              _dialogBuilderExit;
+                              _dialogBuilderExit(context);
                             },
                           ),
                         ),
@@ -235,7 +237,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                           onTap: () {
                             //carregar para sair
-                            _dialogBuilderExit;
+                            _dialogBuilderExit(context);
                           },
                         ),
                       ],
@@ -266,7 +268,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
   // verificar o contexto para qual patromônio vai ser excluido
   Future<void> _dialogBuilderExit(
-      {required BuildContext context, required String id}) {
+    BuildContext context,
+  ) {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -292,6 +295,7 @@ class _SettingsPageState extends State<SettingsPage> {
               child: const Text('Sair'),
               onPressed: () {
                 _firebaseAuth.signOut();
+                context;
               },
             ),
           ],
