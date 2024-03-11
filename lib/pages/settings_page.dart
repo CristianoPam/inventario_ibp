@@ -214,8 +214,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             child: const Icon(
                                 IconData(0xf031, fontFamily: 'MaterialIcons')),
                             onTap: () {
-                             _dialogBuilderExit; 
-                              
+                              _dialogBuilderExit;
                             },
                           ),
                         ),
@@ -272,9 +271,9 @@ class _SettingsPageState extends State<SettingsPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Excluir Patrimônio'),
+          title: const Text('Sair do IBP'),
           content: const Text(
-            'Ao fazer isso, não será mais possível restaurar o Patrimonio!',
+            'Certeza que deseja sair do aplicativo!',
           ),
           actions: <Widget>[
             TextButton(
@@ -290,9 +289,9 @@ class _SettingsPageState extends State<SettingsPage> {
               style: TextButton.styleFrom(
                 textStyle: Theme.of(context).textTheme.labelLarge,
               ),
-              child: const Text('Apagar'),
+              child: const Text('Sair'),
               onPressed: () {
-               
+                _firebaseAuth.signOut();
               },
             ),
           ],
