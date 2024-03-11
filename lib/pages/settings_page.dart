@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:inventario_ibp/constants.dart';
 import 'package:inventario_ibp/pages/two_factors.dart';
 import 'package:inventario_ibp/widget/avatar_card.dart';
-//import 'package:inventario_ibp/widget/setting_tile.dart';
 import 'package:inventario_ibp/widget/support_card.dart';
 import 'package:inventario_ibp/widget/under_construction.dart';
 
