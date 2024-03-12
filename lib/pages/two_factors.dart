@@ -88,13 +88,7 @@ class _TwoFactorsState extends ConsumerState<TwoFactors> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Configurações'),
-        actions: [
-          IconButton(
-            onPressed: ref.read(authServiceProvider).logout,
-            icon: const Icon(Icons.logout),
-          ),
-        ],
+        title: const Text('Configurações'),        
       ),
       body: Column(
         children: [

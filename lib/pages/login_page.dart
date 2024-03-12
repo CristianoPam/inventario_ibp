@@ -37,7 +37,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     setState(() {
       _isLogin = showLoginScreen;
       if (_isLogin) {
-        _title = 'INVENTÁRIO DE \n BENS PATRIMONIAIS';
+        _title = 'Bem vindo ao IBP';
         _actionButton = 'Login';
         _toggleButton = 'Ainda não tem conta? Cadastre-se agora.';
         _passwordConfirmVisivel = false;
@@ -49,7 +49,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         _passwordConfirmVisivel = true;
         _showPassword = false;
         _password.clear();
-        
       }
     });
   }
@@ -117,15 +116,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('assets/images/logo.png', height: 200, width: 150),
+                Image.asset('assets/images/logo.png', height: 300, width: 300),
                 Text(_title, textAlign: TextAlign.center),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 10.0, horizontal: 24.0),
                   child: TextFormField(
-                    controller: _email,
+                    controller: _email,                    
                     decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(                    
+                      ),
                       labelText: 'Email',
                     ),
                     keyboardType: TextInputType.emailAddress,
@@ -149,7 +149,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           _showPassword == false
                               ? Icons.visibility_off
                               : Icons.visibility,
-                          color: Colors.white,
+                          color: const Color(0xFF767676),
                         ),
                         onTap: () {
                           setState(() {
@@ -184,7 +184,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     padding: const EdgeInsets.symmetric(
                         vertical: 10.0, horizontal: 24.0),
                     child: TextFormField(
-                      controller: _passwordConfirm,
+                      controller: _passwordConfirm,                      
                       obscureText: _showPassword == false ? true : false,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(),
@@ -194,7 +194,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             _showPassword == false
                                 ? Icons.visibility_off
                                 : Icons.visibility,
-                            color: Colors.white,
+                            color: const Color(0xFF767676),
                           ),
                           onTap: () {
                             setState(() {

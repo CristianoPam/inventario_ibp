@@ -16,9 +16,8 @@ class _EsqueciSenhaState extends State<EsqueciSenha> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 231, 219, 219),
-      appBar: AppBar(
-        backgroundColor: Colors.brown[200],
+      backgroundColor: Colors.white,
+      appBar: AppBar(        
         title: const Text('Esqueci minha senha'),
       ),
       body: Padding(
@@ -49,7 +48,7 @@ class _EsqueciSenhaState extends State<EsqueciSenha> {
               const SizedBox(height: 16.0),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
+                            
                           ),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
