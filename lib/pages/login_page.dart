@@ -121,74 +121,34 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 10.0, horizontal: 24.0),
-                  child: TextFormField(
-                    controller: _email,                    
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(                    
+                  child: Material(elevation: 10.0,
+                    shadowColor: Colors.blue,
+                    child: TextFormField(
+                      controller: _email,                    
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(                                             
+                        ),
+                        labelText: 'Email',
                       ),
-                      labelText: 'Email',
+                      keyboardType: TextInputType.emailAddress,
+                      validator: Validatorless.multiple([
+                        Validatorless.required('E-mail Obrigatório!'),
+                        Validatorless.email('E-mail Inválido')
+                      ]),
                     ),
-                    keyboardType: TextInputType.emailAddress,
-                    validator: Validatorless.multiple([
-                      Validatorless.required('E-mail Obrigatório!'),
-                      Validatorless.email('E-mail Inválido')
-                    ]),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 10.0, horizontal: 24.0),
-                  child: TextFormField(
-                    controller: _password,
-                    obscureText: _showPassword == false ? true : false,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: 'Senha',
-                      suffixIcon: GestureDetector(
-                        child: Icon(
-                          _showPassword == false
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: const Color(0xFF767676),
-                        ),
-                        onTap: () {
-                          setState(() {
-                            _showPassword = !_showPassword;
-                          });
-                        },
-                      ),
-                    ),
-                    validator: Validatorless.multiple([
-                      Validatorless.required('Senha Obrigatório'),
-                      Validatorless.min(
-                          8, 'Senha precisa ter pelo menos 8 caracteres'),
-                      (value) {
-                        if (!contemNumeros(value.toString())) {
-                          return 'Pelo menos um número';
-                        } else if (!contemLetrasUppercase(value.toString())) {
-                          return 'Ao menos uma letra maiúscula';
-                        } else if (!contemLetrasLowercase(value.toString())) {
-                          return 'Ao menos uma letra minúscula';
-                        } else if (!contemCaracteresEspeciais(
-                            value.toString())) {
-                          return 'Pelo menos um caractere especial';
-                        }
-                        return null;
-                      }
-                    ]),
-                  ),
-                ),
-                Visibility(
-                  visible: _passwordConfirmVisivel,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 24.0),
+                  child: Material( elevation: 10.0,
+                    shadowColor: Colors.blue,
                     child: TextFormField(
-                      controller: _passwordConfirm,                      
+                      controller: _password,                    
                       obscureText: _showPassword == false ? true : false,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(),
-                        labelText: 'Confirme Senha',
+                        labelText: 'Senha',
                         suffixIcon: GestureDetector(
                           child: Icon(
                             _showPassword == false
@@ -219,10 +179,59 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             return 'Pelo menos um caractere especial';
                           }
                           return null;
-                        },
-                        Validators.compare(
-                            _password, 'Senha diferente de confirma senha')
+                        }
                       ]),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: _passwordConfirmVisivel,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 24.0),
+                    child: Material(elevation: 10.0,
+                    shadowColor: Colors.blue,
+                      child: TextFormField(
+                        controller: _passwordConfirm,                      
+                        obscureText: _showPassword == false ? true : false,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          labelText: 'Confirme Senha',
+                          suffixIcon: GestureDetector(
+                            child: Icon(
+                              _showPassword == false
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: const Color(0xFF767676),
+                            ),
+                            onTap: () {
+                              setState(() {
+                                _showPassword = !_showPassword;
+                              });
+                            },
+                          ),
+                        ),
+                        validator: Validatorless.multiple([
+                          Validatorless.required('Senha Obrigatório'),
+                          Validatorless.min(
+                              8, 'Senha precisa ter pelo menos 8 caracteres'),
+                          (value) {
+                            if (!contemNumeros(value.toString())) {
+                              return 'Pelo menos um número';
+                            } else if (!contemLetrasUppercase(value.toString())) {
+                              return 'Ao menos uma letra maiúscula';
+                            } else if (!contemLetrasLowercase(value.toString())) {
+                              return 'Ao menos uma letra minúscula';
+                            } else if (!contemCaracteresEspeciais(
+                                value.toString())) {
+                              return 'Pelo menos um caractere especial';
+                            }
+                            return null;
+                          },
+                          Validators.compare(
+                              _password, 'Senha diferente de confirma senha')
+                        ]),
+                      ),
                     ),
                   ),
                 ),
