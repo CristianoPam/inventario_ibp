@@ -15,13 +15,6 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   bool saved = false;
 
-  // final _firebaseAuth = FirebaseAuth.instance;
-
-  // void signUserOut() async {
-  //   await _firebaseAuth.signOut();
-  //   context.go('/login');
-  // }
-
   StreamSubscription? streamSubscription;
 
   @override
@@ -64,6 +57,7 @@ class _HomepageState extends State<Homepage> {
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();
           }
+
 
           return ListView.builder(
               itemCount: snapshot.data!.docs.length,
