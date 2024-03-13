@@ -38,7 +38,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       _isLogin = showLoginScreen;
       if (_isLogin) {
         _title = 'Bem vindo ao IBP';
-        _actionButton = 'Login';
+        _actionButton = 'Entrar';
         _toggleButton = 'Ainda não tem conta? Cadastre-se agora.';
         _passwordConfirmVisivel = false;
         _showPassword = false;
@@ -121,12 +121,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 10.0, horizontal: 24.0),
-                  child: Material(elevation: 10.0,
+                  child: Material(
+                    elevation: 10.0,
                     shadowColor: Colors.blue,
+                    borderRadius: BorderRadius.circular(15),
                     child: TextFormField(
                       controller: _email,                    
                       decoration: const InputDecoration(
-                        border: OutlineInputBorder(                                             
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                          borderSide: BorderSide(color: Colors.blue),                                             
                         ),
                         labelText: 'Email',
                       ),
@@ -141,13 +145,18 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 10.0, horizontal: 24.0),
-                  child: Material( elevation: 10.0,
+                  child: Material( 
+                    elevation: 10.0,
                     shadowColor: Colors.blue,
+                    borderRadius: BorderRadius.circular(15),
                     child: TextFormField(
                       controller: _password,                    
                       obscureText: _showPassword == false ? true : false,
                       decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                          borderSide: BorderSide(color: Colors.blue), 
+                        ),
                         labelText: 'Senha',
                         suffixIcon: GestureDetector(
                           child: Icon(
@@ -191,11 +200,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         vertical: 10.0, horizontal: 24.0),
                     child: Material(elevation: 10.0,
                     shadowColor: Colors.blue,
+                    borderRadius: BorderRadius.circular(15),                    
                       child: TextFormField(
                         controller: _passwordConfirm,                      
                         obscureText: _showPassword == false ? true : false,
                         decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
+                          border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                         borderSide: BorderSide(color: Colors.blue),     
+                          ),
                           labelText: 'Confirme Senha',
                           suffixIcon: GestureDetector(
                             child: Icon(
@@ -287,7 +300,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               )
                             ]
                           : [
-                              const Icon(Icons.check),
+                              
                               Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: Text(

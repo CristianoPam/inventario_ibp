@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 final _auth = FirebaseAuth.instance;
 
 //EsqueciSenha
@@ -17,7 +18,7 @@ class _EsqueciSenhaState extends State<EsqueciSenha> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(        
+      appBar: AppBar(
         title: const Text('Esqueci minha senha'),
       ),
       body: Padding(
@@ -27,35 +28,48 @@ class _EsqueciSenhaState extends State<EsqueciSenha> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  labelText: 'E-mail',
-                  border: OutlineInputBorder(),
+
+            const Text('Insira seu endereço de e-mail abaixo para redefinir sua senha.', 
+            textAlign: TextAlign.left, style: TextStyle(fontSize: 17),),
+            const SizedBox(height: 40.0),
+              Material(
+                elevation: 10.0,
+                    shadowColor: Colors.blue,
+                    borderRadius: BorderRadius.circular(20),
+                  child: TextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                      labelText: 'E-mail',
+                        border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        borderSide: BorderSide(color: Colors.blue),                        
+                      ),                      
+                      ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      _email = value.trim();
+                    });
+                  },
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  return null;
-                },
-                onChanged: (value) {
-                  setState(() {
-                    _email = value.trim();
-                  });
-                },
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 40.0),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                            
-                          ),
+                style: ElevatedButton.styleFrom(),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _resetPassword(_email);
                   }
                 },
-                child: const Text('Enviar e-mail de redefinição de senha', style: TextStyle(color: Colors.black),),
+                child: const Text(
+                  'Enviar e-mail de redefinição de senha',
+                  style: TextStyle(color: Colors.blue),
+                ),
               ),
             ],
           ),
