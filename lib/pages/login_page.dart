@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:inventario_ibp/model/password_validation.dart';
 import 'package:inventario_ibp/pages/validators.dart';
 import 'package:inventario_ibp/services/auth_services.dart';
 import 'package:validatorless/validatorless.dart';
@@ -18,6 +19,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final _email = TextEditingController();
   final _password = TextEditingController();
   final _passwordConfirm = TextEditingController();
+
+  var passValidator = PassValidarion();
 
   bool _isLogin = true;
   bool _loading = false;
@@ -126,11 +129,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     shadowColor: Colors.blue,
                     borderRadius: BorderRadius.circular(15),
                     child: TextFormField(
-                      controller: _email,                    
+                      controller: _email,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(15)),
-                          borderSide: BorderSide(color: Colors.blue),                                             
+                          borderSide: BorderSide(color: Colors.blue),
                         ),
                         labelText: 'Email',
                       ),
@@ -145,17 +148,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 10.0, horizontal: 24.0),
-                  child: Material( 
+                  child: Material(
                     elevation: 10.0,
                     shadowColor: Colors.blue,
                     borderRadius: BorderRadius.circular(15),
                     child: TextFormField(
-                      controller: _password,                    
+                      controller: _password,
                       obscureText: _showPassword == false ? true : false,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(15)),
-                          borderSide: BorderSide(color: Colors.blue), 
+                          borderSide: BorderSide(color: Colors.blue),
                         ),
                         labelText: 'Senha',
                         suffixIcon: GestureDetector(
@@ -177,13 +180,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         Validatorless.min(
                             8, 'Senha precisa ter pelo menos 8 caracteres'),
                         (value) {
-                          if (!contemNumeros(value.toString())) {
+                          if (!passValidator.contemNumeros(value.toString())) {
                             return 'Pelo menos um número';
-                          } else if (!contemLetrasUppercase(value.toString())) {
+                          } else if (!passValidator.contemLetrasUppercase(value.toString())) {
                             return 'Ao menos uma letra maiúscula';
-                          } else if (!contemLetrasLowercase(value.toString())) {
+                          } else if (!passValidator.contemLetrasLowercase(value.toString())) {
                             return 'Ao menos uma letra minúscula';
-                          } else if (!contemCaracteresEspeciais(
+                          } else if (!passValidator.contemCaracteresEspeciais(
                               value.toString())) {
                             return 'Pelo menos um caractere especial';
                           }
@@ -198,16 +201,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 10.0, horizontal: 24.0),
-                    child: Material(elevation: 10.0,
-                    shadowColor: Colors.blue,
-                    borderRadius: BorderRadius.circular(15),                    
+                    child: Material(
+                      elevation: 10.0,
+                      shadowColor: Colors.blue,
+                      borderRadius: BorderRadius.circular(15),
                       child: TextFormField(
-                        controller: _passwordConfirm,                      
+                        controller: _passwordConfirm,
                         obscureText: _showPassword == false ? true : false,
                         decoration: InputDecoration(
                           border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                         borderSide: BorderSide(color: Colors.blue),     
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            borderSide: BorderSide(color: Colors.blue),
                           ),
                           labelText: 'Confirme Senha',
                           suffixIcon: GestureDetector(
@@ -229,14 +233,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           Validatorless.min(
                               8, 'Senha precisa ter pelo menos 8 caracteres'),
                           (value) {
-                            if (!contemNumeros(value.toString())) {
-                              return 'Pelo menos um número';
-                            } else if (!contemLetrasUppercase(value.toString())) {
-                              return 'Ao menos uma letra maiúscula';
-                            } else if (!contemLetrasLowercase(value.toString())) {
-                              return 'Ao menos uma letra minúscula';
-                            } else if (!contemCaracteresEspeciais(
+                            if (!passValidator.contemNumeros(
                                 value.toString())) {
+                              return 'Pelo menos um número';
+                            } else if (!passValidator.contemLetrasUppercase(
+                                value.toString())) {
+                              return 'Ao menos uma letra maiúscula';
+                            } else if (!passValidator.contemLetrasLowercase(
+                                value.toString())) {
+                              return 'Ao menos uma letra minúscula';
+                            } else if (!passValidator.contemCaracteresEspeciais(value.toString())) {
                               return 'Pelo menos um caractere especial';
                             }
                             return null;
@@ -300,7 +306,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               )
                             ]
                           : [
-                              
                               Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: Text(
@@ -322,25 +327,5 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         ),
       ),
     );
-  }
-
-  bool contemLetrasUppercase(String input) {
-    final regex = RegExp(r'[A-Z]');
-    return regex.hasMatch(input);
-  }
-
-  bool contemLetrasLowercase(String input) {
-    final regex = RegExp(r'[a-z]');
-    return regex.hasMatch(input);
-  }
-
-  bool contemNumeros(String input) {
-    final regex = RegExp(r'\d');
-    return regex.hasMatch(input);
-  }
-
-  bool contemCaracteresEspeciais(String input) {
-    final regex = RegExp(r'[!@#\$%^&*()_+{}\[\]:;<>,.?~\\-]');
-    return regex.hasMatch(input);
   }
 }

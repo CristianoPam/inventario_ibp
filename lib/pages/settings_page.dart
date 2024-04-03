@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inventario_ibp/constants.dart';
+import 'package:inventario_ibp/pages/avatar_alterar_senha.dart';
 import 'package:inventario_ibp/pages/two_factors.dart';
 import 'package:inventario_ibp/widget/avatar_card.dart';
 import 'package:inventario_ibp/widget/support_card.dart';
@@ -62,7 +63,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      const UnderConstruction(),
+                                      const UserPage(),
                                 ),
                               );
                             },
@@ -87,7 +88,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const UnderConstruction(),
+                                builder: (context) => const UserPage(),
                               ),
                             );
                           },
