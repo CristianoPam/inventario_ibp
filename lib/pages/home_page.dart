@@ -20,9 +20,10 @@ class _HomepageState extends State<Homepage> {
   final TextEditingController _searchController = TextEditingController();
 
   @override
- void initState() {
+  void initState() {
     super.initState();
-    patrimonios = FirebaseFirestore.instance.collection('patrimonios').snapshots();
+    patrimonios =
+        FirebaseFirestore.instance.collection('patrimonios').snapshots();
   }
 
   @override
@@ -32,8 +33,6 @@ class _HomepageState extends State<Homepage> {
     super.dispose();
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     // FirebaseAuth.instance.signOut();
@@ -41,35 +40,43 @@ class _HomepageState extends State<Homepage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (_) => NovoPatrimonioPage()));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (_) => NovoPatrimonioPage()));
         },
         label: const Text('Adicionar'),
         icon: const Icon(Icons.add_task),
       ),
       appBar: AppBar(
         title: Image.asset('assets/images/logo.png', height: 50, width: 50),
-        centerTitle: true,        
+        centerTitle: true,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(60),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _searchController,
-              onChanged: (value) {
-
-                setState(() {
-                patrimonios = FirebaseFirestore.instance
-                    .collection('patrimonios')
-                    .where('descricao', isGreaterThanOrEqualTo: value)
-                    .where('descricao', isLessThan: value + 'z')
-                    .snapshots();
-              });
-                // Implemente a lógica de filtragem aqui
-              },
-              decoration: InputDecoration(
-                hintText: "Pesquisar...",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+            child: Material(
+              elevation: 10.0,
+              shadowColor: Colors.blue,
+              borderRadius: BorderRadius.circular(15),
+              child: TextField(
+                controller: _searchController,
+                onChanged: (value) {
+                  setState(() {
+                    patrimonios = FirebaseFirestore.instance
+                        .collection('patrimonios')                        
+                        .where('descricao', isGreaterThanOrEqualTo: value)
+                        .where('descricao', isLessThan: '${value}z')                                                
+                        .snapshots();
+                  });
+                  // Implemente a lógica de filtragem aqui
+                },
+                decoration: const InputDecoration(
+                  labelText: 'Pesquisar',
+                  hintText: 'Pesquisar...',
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
                 ),
               ),
             ),
@@ -87,7 +94,8 @@ class _HomepageState extends State<Homepage> {
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
-              Patrimonio patrimonio = Patrimonio.fromJson(snapshot.data!.docs[index].data() as Map<String, dynamic>);
+              Patrimonio patrimonio = Patrimonio.fromJson(
+                  snapshot.data!.docs[index].data() as Map<String, dynamic>);
               return ListTile(
                 tileColor: Colors.white,
                 onTap: () {
