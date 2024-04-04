@@ -87,6 +87,7 @@ class _HomepageState extends State<Homepage> {
         stream: patrimonios,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
+            
             return const Text('Erro ao buscar dados');
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();

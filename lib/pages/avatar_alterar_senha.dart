@@ -1,61 +1,89 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:inventario_ibp/model/password_validation.dart';
 import 'package:validatorless/validatorless.dart';
 
 class UserPage extends StatefulWidget {
-    const UserPage({super.key});
+  const UserPage({super.key});
 
-    @override
-    State<UserPage> createState() => _UserPageState();
+  @override
+  State<UserPage> createState() => _UserPageState();
 }
 
 class _UserPageState extends State<UserPage> {
-    final _formKey = GlobalKey<FormState>();
-    final _avatar = Image.asset('assets/images/avatar.png');
-    final _name = 'Cristiano Pereira Alves';
-    final _email = 'cpa.cristiano@gmail.com';
-    final _currentPasswordController = TextEditingController();
-    final _newPasswordController = TextEditingController();
-    var passValidator = PassValidarion();
-    bool _showPassword = false;
+  var auth = FirebaseAuth.instance;
+  var currentUser = FirebaseAuth.instance.currentUser;
 
-    @override
-    Widget build(BuildContext context) {
+  final _formKey = GlobalKey<FormState>();
+  final _avatar = Image.asset('assets/images/avatar.png');
+  final _name = 'Cristiano Pereira Alves';
+  String _email = '';
+  final _currentPasswordController = TextEditingController();
+  final _newPasswordController = TextEditingController();
+  var passValidator = PassValidarion();
+  bool _showPassword = false;
+
+  changePassword({email, oldPassword, newPassword}) async {
+    var cred =
+        EmailAuthProvider.credential(email: email, password: oldPassword);
+
+    await currentUser!.reauthenticateWithCredential(cred).then((value) {
+      currentUser!.updatePassword(newPassword);
+    }).catchError((error) {
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    });
+  }
+
+  @override
+  initState() {
+    super.initState();
+    setState(() {
+      User? usuario = currentUser;
+      //nome = usuario!.displayName.toString();
+      _email = usuario!.email.toString();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+      appBar: AppBar(
         title: const Text('Perfil'),
-        ),
-        body: SingleChildScrollView(
+      ),
+      body: SingleChildScrollView(
         child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Form(
+          padding: const EdgeInsets.all(24.0),
+          child: Form(
             key: _formKey,
             child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
                 // Avatar
                 CircleAvatar(
-                    radius: 50,
-                    backgroundImage: _avatar.image,
+                  radius: 50,
+                  backgroundImage: _avatar.image,
                 ),
 
                 // Name
                 const SizedBox(height: 20),
                 Text(
-                    _name,
-                    style: const TextStyle(
+                  _name,
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    ),
+                  ),
                 ),
 
                 // Email
                 const SizedBox(height: 10),
                 Text(
-                    _email,
-                    style: const TextStyle(
+                  _email,
+                  style: const TextStyle(
                     fontSize: 16,
-                    ),
+                  ),
                 ),
 
                 // Current Password
@@ -90,19 +118,19 @@ class _UserPageState extends State<UserPage> {
                           },
                         ),
                       ),
-                      validator:  (value) {
-                    if (value == null || value.isEmpty) {
-                        return 'Por favor digite sua senha atual';
-                    }
-                    return null;
-                    },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor digite sua senha atual';
+                        }
+                        return null;
+                      },
                     ),
                   ),
                 ),
 
                 // New Password
                 const SizedBox(height: 10),
-                 Padding(
+                Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 10.0, horizontal: 24.0),
                   child: Material(
@@ -139,12 +167,14 @@ class _UserPageState extends State<UserPage> {
                         (value) {
                           if (!passValidator.contemNumeros(value.toString())) {
                             return 'Pelo menos um número';
-                          } else if (!passValidator.contemLetrasUppercase(value.toString())) {
+                          } else if (!passValidator
+                              .contemLetrasUppercase(value.toString())) {
                             return 'Ao menos uma letra maiúscula';
-                          } else if (!passValidator.contemLetrasLowercase(value.toString())) {
+                          } else if (!passValidator
+                              .contemLetrasLowercase(value.toString())) {
                             return 'Ao menos uma letra minúscula';
-                          } else if (!passValidator.contemCaracteresEspeciais(
-                              value.toString())) {
+                          } else if (!passValidator
+                              .contemCaracteresEspeciais(value.toString())) {
                             return 'Pelo menos um caractere especial';
                           }
                           return null;
@@ -154,18 +184,24 @@ class _UserPageState extends State<UserPage> {
                   ),
                 ),
 
-                
                 // CHANGE BUTTON
                 const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: ElevatedButton(
-                      onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                          // TODO: Implementar lógica de alteração de senha
+                        await changePassword(
+                          email: _email,
+                          oldPassword: _currentPasswordController.text,
+                          newPassword: _newPasswordController.text,
+                        );
+                        if (kDebugMode) {
+                          print("Password redefinido!");
+                        }
                       }
-                      },
-                      child: const Row(
+                    },
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: (false)
                           // ignore: dead_code
@@ -183,7 +219,6 @@ class _UserPageState extends State<UserPage> {
                             ]
                           // ignore: dead_code
                           : [
-                              
                               Padding(
                                 padding: EdgeInsets.all(4.0),
                                 child: Text(
@@ -195,11 +230,11 @@ class _UserPageState extends State<UserPage> {
                     ),
                   ),
                 ),
-                ],
+              ],
             ),
-            ),
+          ),
         ),
-        ),
+      ),
     );
-    }
+  }
 }
