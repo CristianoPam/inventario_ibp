@@ -52,9 +52,9 @@ class _HomepageState extends State<Homepage> {
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(60),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(10.0),
             child: Material(
-              elevation: 10.0,
+              elevation: 5.0,
               shadowColor: Colors.blue,
               borderRadius: BorderRadius.circular(15),
               child: TextField(

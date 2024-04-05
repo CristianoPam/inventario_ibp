@@ -5,45 +5,69 @@ import 'package:inventario_ibp/model/password_validation.dart';
 import 'package:validatorless/validatorless.dart';
 
 class UserPage extends StatefulWidget {
-  const UserPage({super.key});
+  const UserPage({Key? key}) : super(key: key);
 
   @override
   State<UserPage> createState() => _UserPageState();
 }
 
 class _UserPageState extends State<UserPage> {
-  var auth = FirebaseAuth.instance;
-  var currentUser = FirebaseAuth.instance.currentUser;
-
+  final auth = FirebaseAuth.instance;
+  User? currentUser;
   final _formKey = GlobalKey<FormState>();
-  final _avatar = Image.asset('assets/images/avatar.png');
-  final _name = 'Cristiano Pereira Alves';
-  String _email = '';
   final _currentPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
   var passValidator = PassValidarion();
   bool _showPassword = false;
+  bool _loading = false;
+  String _email = '';
+  String _name = '';
+  final _avatar = Image.asset('assets/images/avatar.png');
 
-  changePassword({email, oldPassword, newPassword}) async {
-    var cred =
-        EmailAuthProvider.credential(email: email, password: oldPassword);
+  @override
+  void initState() {
+    super.initState();
+    currentUser = auth.currentUser;
+    _email = currentUser!.email.toString();
+    
+    if (_email.contains('cpa.cristiano@gmail.com') ) {
+      _name = 'Cristiano Pereira Alves';
+    } else {
+      _name = 'Thays Martines ';
+    }
+    
+  }
 
-    await currentUser!.reauthenticateWithCredential(cred).then((value) {
-      currentUser!.updatePassword(newPassword);
-    }).catchError((error) {
+  Future<void> changePassword(
+      {required String email,
+      required String oldPassword,
+      required String newPassword}) async {
+    setState(() {
+      _loading = true;
+    });
+
+    try {
+      final cred =
+          EmailAuthProvider.credential(email: email, password: oldPassword);
+      await currentUser!.reauthenticateWithCredential(cred);
+      await currentUser!.updatePassword(newPassword);
+      if (kDebugMode) {
+        print("Password redefinido!");
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Senha alterada com sucesso')));
+      _currentPasswordController.clear();
+      _newPasswordController.clear();
+    } catch (error) {
       if (kDebugMode) {
         print(error.toString());
       }
-    });
-  }
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Erro ao alterar a senha')));
+    }
 
-  @override
-  initState() {
-    super.initState();
     setState(() {
-      User? usuario = currentUser;
-      //nome = usuario!.displayName.toString();
-      _email = usuario!.email.toString();
+      _loading = false;
     });
   }
 
@@ -61,7 +85,7 @@ class _UserPageState extends State<UserPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Avatar
+                // Avatar, Name, Email - unchanged
                 CircleAvatar(
                   radius: 50,
                   backgroundImage: _avatar.image,
@@ -86,8 +110,9 @@ class _UserPageState extends State<UserPage> {
                   ),
                 ),
 
-                // Current Password
                 const SizedBox(height: 60),
+
+                // Current Password
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 10.0, horizontal: 24.0),
@@ -97,7 +122,7 @@ class _UserPageState extends State<UserPage> {
                     borderRadius: BorderRadius.circular(15),
                     child: TextFormField(
                       controller: _currentPasswordController,
-                      obscureText: _showPassword == false ? true : false,
+                      obscureText: !_showPassword,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -106,9 +131,9 @@ class _UserPageState extends State<UserPage> {
                         labelText: 'Senha Atual',
                         suffixIcon: GestureDetector(
                           child: Icon(
-                            _showPassword == false
-                                ? Icons.visibility_off
-                                : Icons.visibility,
+                            _showPassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                             color: const Color(0xFF767676),
                           ),
                           onTap: () {
@@ -128,8 +153,9 @@ class _UserPageState extends State<UserPage> {
                   ),
                 ),
 
-                // New Password
                 const SizedBox(height: 10),
+
+                // New Password
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 10.0, horizontal: 24.0),
@@ -139,7 +165,7 @@ class _UserPageState extends State<UserPage> {
                     borderRadius: BorderRadius.circular(15),
                     child: TextFormField(
                       controller: _newPasswordController,
-                      obscureText: _showPassword == false ? true : false,
+                      obscureText: !_showPassword,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -148,9 +174,9 @@ class _UserPageState extends State<UserPage> {
                         labelText: 'Nova Senha',
                         suffixIcon: GestureDetector(
                           child: Icon(
-                            _showPassword == false
-                                ? Icons.visibility_off
-                                : Icons.visibility,
+                            _showPassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                             color: const Color(0xFF767676),
                           ),
                           onTap: () {
@@ -161,7 +187,7 @@ class _UserPageState extends State<UserPage> {
                         ),
                       ),
                       validator: Validatorless.multiple([
-                        Validatorless.required('Nova senha Obrigatória'),
+                        Validatorless.required('Nova senha obrigatória'),
                         Validatorless.min(
                             8, 'Senha precisa ter pelo menos 8 caracteres'),
                         (value) {
@@ -184,51 +210,32 @@ class _UserPageState extends State<UserPage> {
                   ),
                 ),
 
-                // CHANGE BUTTON
                 const SizedBox(height: 20),
+
+                // CHANGE BUTTON
                 Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        await changePassword(
-                          email: _email,
-                          oldPassword: _currentPasswordController.text,
-                          newPassword: _newPasswordController.text,
-                        );
-                        if (kDebugMode) {
-                          print("Password redefinido!");
-                        }
-                      }
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: (false)
-                          // ignore: dead_code
-                          ? [
-                              Padding(
-                                padding: EdgeInsets.all(16),
-                                child: SizedBox(
-                                  width: 24,
-                                  height: 24,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              )
-                            ]
-                          // ignore: dead_code
-                          : [
-                              Padding(
-                                padding: EdgeInsets.all(4.0),
-                                child: Text(
-                                  'Alterar Senha',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ),
-                            ],
-                    ),
-                  ),
+                      onPressed: _loading
+                          ? null
+                          : () async {
+                              if (_formKey.currentState!.validate()) {
+                                await changePassword(
+                                  email: currentUser!.email!,
+                                  oldPassword: _currentPasswordController.text,
+                                  newPassword: _newPasswordController.text,
+                                );
+                              }
+                            },
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _loading
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white)
+                                : const Text('Alterar Senha',
+                                    style: TextStyle(fontSize: 20)),
+                          ])),
                 ),
               ],
             ),
