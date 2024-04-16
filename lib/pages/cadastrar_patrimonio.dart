@@ -1,16 +1,30 @@
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import '../Patrimonio.dart';
+import '../patrimonio.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 // ignore: must_be_immutable
 class NovoPatrimonioPage extends StatefulWidget {
   Patrimonio? patrimonio;
   NovoPatrimonioPage({Key? key, this.patrimonio}) : super(key: key);
 
+ 
+
   @override
   State<NovoPatrimonioPage> createState() => _NovoPatrimonioPageState();
 }
+
+List<Reference> refs = [];
+List<String> arquivos = [];
+bool loading = true;
+bool uploading = false;
+double total = 0;
+String? imageUrl;
+
+
 
 class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
   temPatrimonio() async {
@@ -30,11 +44,68 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
       vidaController.text = widget.patrimonio!.vidaUtil;
       depreciacaoController.text = widget.patrimonio!.depreciacao;
       observacaoController.text = widget.patrimonio!.descricao;
+      
 
       setState(() {});
     }
   }
 
+  Future<XFile?> getImage() async {
+    final ImagePicker picker = ImagePicker();
+    XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    return image;
+  }
+
+  Future<UploadTask> upload(String path) async {
+    File file = File(path);
+    try {
+      String ref = 'images/img-${DateTime.now().toString()}.jpeg';
+      final storageRef = FirebaseStorage.instance.ref();
+      return storageRef.child(ref).putFile(
+            file,
+            SettableMetadata(
+              cacheControl: "public, max-age=300",
+              contentType: "image/jpeg",
+              customMetadata: {
+                "user": "123",
+              },
+            ),
+          );
+    } on FirebaseException catch (e) {
+      throw Exception('Erro no upload: ${e.code}');
+    }
+  }
+
+   pickAndUploadImage() async {
+    XFile? file = await getImage();
+    if (file != null) {
+      UploadTask task = await upload(file.path);
+
+      task.snapshotEvents.listen((TaskSnapshot snapshot) async {
+        if (snapshot.state == TaskState.running) {
+          setState(() {
+            uploading = true;
+            total = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          });
+        } else if (snapshot.state == TaskState.success) {
+          final photoRef = snapshot.ref;
+          arquivos.add(await photoRef.getDownloadURL());
+          String downloadUrl = await photoRef.getDownloadURL();
+          refs.add(photoRef);
+          setState(() => uploading = false);
+          imageUrl = downloadUrl;
+        }
+      });
+    }
+  }
+
+
+
+  
+
+  
+
+//storage
   pegarCodigo() async {
     if (widget.patrimonio == null) {
       Random random = Random();
@@ -49,7 +120,12 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
     }
   }
 
+
+
+
   @override
+
+ 
   void initState() {
     temPatrimonio();
     super.initState();
@@ -57,8 +133,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
   }
 
   final _formKey = GlobalKey<FormState>();
-  final firestorePatrimonio =
-      FirebaseFirestore.instance.collection('patrimonios');
+  final firestorePatrimonio = FirebaseFirestore.instance.collection('patrimonios');
   final codigoController = TextEditingController();
   final fornecedorController = TextEditingController();
   final numeroSerieController = TextEditingController();
@@ -75,6 +150,9 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
   final depreciacaoController = TextEditingController();
   final vidaController = TextEditingController();
   final despreciacaoController = TextEditingController();
+  
+  
+  
   DateTime? dataAquisicao;
   DateTime? dataGarantia;
   final empresas = <String>[
@@ -158,9 +236,28 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
             child: ListView(
               padding: const EdgeInsets.only(
                   left: 12, top: 12, right: 12, bottom: 62),
-              children: [
+              children: [      
+
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                       const Icon(Icons.image),
+                       const Text('Adicionar Imagem'),
+                      IconButton(
+                      icon: const Icon(Icons.upload),
+                      onPressed: pickAndUploadImage,
+                                      ),
+                    ],
+                  ),
+
+//adicionar link da imagem no storage
+
+                  Text('link: $imageUrl'),
+
                 Row(
                   children: [
+
                     Expanded(
                       child: TextFormField(
                         enabled: false,
@@ -502,7 +599,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
                   height: 12,
                 ),
                 TextFormField(
-                  controller: observacaoController,
+                  controller: observacaoController,                  
                   maxLines: 3,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -547,6 +644,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
                       vidaUtil: vidaController.text,
                       depreciacao: depreciacaoController.text,
                       observacoes: observacaoController.text,
+                      img: imageUrl.toString(),
                     );
 
                     firestorePatrimonio

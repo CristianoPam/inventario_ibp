@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:inventario_ibp/Patrimonio.dart';
+import 'package:inventario_ibp/patrimonio.dart';
 import 'package:inventario_ibp/pages/patrimonio_page.dart';
-import 'cadastrar_page.dart';
+import 'cadastrar_patrimonio.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});

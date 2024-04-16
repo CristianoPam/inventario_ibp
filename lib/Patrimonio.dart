@@ -1,6 +1,6 @@
 class Patrimonio {
   String cod;
-  String? img;
+  String img;
   String nSerie;
   String descricao;
   String filial;
@@ -20,7 +20,7 @@ class Patrimonio {
 
   Patrimonio(
       {required this.cod,
-      this.img,
+      required this.img,
       required this.nSerie,
       required this.descricao,
       required this.filial,

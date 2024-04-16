@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:inventario_ibp/Patrimonio.dart';
-import 'cadastrar_page.dart';
+import 'package:inventario_ibp/patrimonio.dart';
+import 'cadastrar_patrimonio.dart';
 
 // ignore: must_be_immutable
 class PatrimonioPage extends StatelessWidget {
