@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:inventario_ibp/patrimonio.dart';
 import 'cadastrar_patrimonio.dart';
 
@@ -18,95 +19,109 @@ class PatrimonioPage extends StatelessWidget {
           style: const TextStyle(color: Colors.black),
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,      
-        children: [      
-          
-          Column(
-            children: [
-              const SizedBox(height: 10,),
-              Image.network(
-                patrimonio.img ??
-                    'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1024px-Default_pfp.svg.png',
-                fit: 
-                BoxFit.cover,                                  
-              ),
+      body: LayoutBuilder (
 
-              const SizedBox(height: 20,),
+        builder: (context,constraints) {
+          return SizedBox(
+            width: constraints.maxWidth * 1, 
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,      
+              children: [  
 
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Descrição: ${patrimonio.descricao} \n',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Raleway',
-                        fontSize: 20,
+                
+                
+                Column(
+                  children: [
+                    const SizedBox(height: 10,),
+                    SizedBox(
+                      width: constraints.maxWidth * .6,
+                      height: constraints.maxHeight * .3,
+                      child: Image.network(
+                        patrimonio.img ??
+                            'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1024px-Default_pfp.svg.png',
+                        fit: 
+                        BoxFit.cover,                                  
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      ' Valor: R\$ ${patrimonio.valor} ',
-                    ),
-                  ),
-                ],
-              ),
-            ],            
-          ),
-
-          Column(                       
-            children: [
-              Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          FloatingActionButton.extended(                      
-                            onPressed: () {
-                              // Adicione a lógica desejada para o botão de editar aqui                    
-                            Navigator.push(
-                            context,
-                              MaterialPageRoute(
-                              builder: (_) => NovoPatrimonioPage(
-                                patrimonio: patrimonio,
-                              ),
+            
+                    const SizedBox(height: 20,),
+            
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+            
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Descrição: ${patrimonio.descricao} \n',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Raleway',
+                              fontSize: 20,
                             ),
-                          );                  
-                            },
-                            tooltip: 'Editar',
-                            heroTag: null, // Defina como null para evitar um aviso
-                            backgroundColor: Colors.transparent,                      
-                            elevation: 0,                      
-                            foregroundColor: const Color(0xFF767676),
-                            label: const Text('Editar'),
-                            icon: const Icon(Icons.edit),
                           ),
-              
-                          FloatingActionButton.extended(                            
-                            onPressed: () {
-                              // Adicione a lógica desejada para o botão de excluir aqui
-                              _dialogBuilder(
-                                   context: context, id: patrimonio.cod);                  
-                            },                            
-                            tooltip: 'Excluir',
-                            heroTag: null, // Defina como null para evitar um aviso
-                            backgroundColor: Colors.transparent,                      
-                            elevation: 0,                      
-                            foregroundColor: const Color(0xFF767676), 
-                            label: const Text('Excluir'),                                                                            
-                            icon: const Icon(Icons.delete,),                                                        
-                          ),]),
-            ],
-          )
-
-
-        ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            ' Valor: R\$ ${patrimonio.valor} ',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],            
+                ),
+            
+                Column(                       
+                  children: [
+                    Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: <Widget>[
+                                FloatingActionButton.extended(                      
+                                  onPressed: () {
+                                    // Adicione a lógica desejada para o botão de editar aqui                    
+                                  Navigator.push(
+                                  context,
+                                    MaterialPageRoute(
+                                    builder: (_) => NovoPatrimonioPage(
+                                      patrimonio: patrimonio,
+                                    ),
+                                  ),
+                                );                  
+                                  },
+                                  tooltip: 'Editar',
+                                  heroTag: null, // Defina como null para evitar um aviso
+                                  backgroundColor: Colors.transparent,                      
+                                  elevation: 0,                      
+                                  foregroundColor: const Color(0xFF767676),
+                                  label: const Text('Editar'),
+                                  icon: const Icon(Icons.edit),
+                                ),
+                    
+                                FloatingActionButton.extended(                            
+                                  onPressed: () {
+                                    // Adicione a lógica desejada para o botão de excluir aqui
+                                    _dialogBuilder(
+                                         context: context, id: patrimonio.cod);                  
+                                  },                            
+                                  tooltip: 'Excluir',
+                                  heroTag: null, // Defina como null para evitar um aviso
+                                  backgroundColor: Colors.transparent,                      
+                                  elevation: 0,                      
+                                  foregroundColor: const Color(0xFF767676), 
+                                  label: const Text('Excluir'),                                                                            
+                                  icon: const Icon(Icons.delete,),                                                        
+                                ),]),
+                  ],
+                )
+            
+            
+              ],
+            ),
+          );
+        }
       ),
     );
   }

@@ -11,8 +11,6 @@ class NovoPatrimonioPage extends StatefulWidget {
   Patrimonio? patrimonio;
   NovoPatrimonioPage({Key? key, this.patrimonio}) : super(key: key);
 
- 
-
   @override
   State<NovoPatrimonioPage> createState() => _NovoPatrimonioPageState();
 }
@@ -23,7 +21,6 @@ bool loading = true;
 bool uploading = false;
 double total = 0;
 String? imageUrl;
-
 
 
 class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
@@ -44,7 +41,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
       vidaController.text = widget.patrimonio!.vidaUtil;
       depreciacaoController.text = widget.patrimonio!.depreciacao;
       observacaoController.text = widget.patrimonio!.descricao;
-      
+      imageUrl = widget.patrimonio!.img;
 
       setState(() {});
     }
@@ -76,7 +73,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
     }
   }
 
-   pickAndUploadImage() async {
+  pickAndUploadImage() async {
     XFile? file = await getImage();
     if (file != null) {
       UploadTask task = await upload(file.path);
@@ -90,20 +87,18 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
         } else if (snapshot.state == TaskState.success) {
           final photoRef = snapshot.ref;
           arquivos.add(await photoRef.getDownloadURL());
-          String downloadUrl = await photoRef.getDownloadURL();
+          String downloadUrl = await photoRef.getDownloadURL();        
           refs.add(photoRef);
           setState(() => uploading = false);
           imageUrl = downloadUrl;
+          // index = indexref;
         }
       });
     }
   }
 
+ 
 
-
-  
-
-  
 
 //storage
   pegarCodigo() async {
@@ -120,20 +115,16 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
     }
   }
 
-
-
-
   @override
-
- 
   void initState() {
-    temPatrimonio();
+    temPatrimonio();    
     super.initState();
     pegarCodigo();
   }
 
   final _formKey = GlobalKey<FormState>();
-  final firestorePatrimonio = FirebaseFirestore.instance.collection('patrimonios');
+  final firestorePatrimonio =
+      FirebaseFirestore.instance.collection('patrimonios');
   final codigoController = TextEditingController();
   final fornecedorController = TextEditingController();
   final numeroSerieController = TextEditingController();
@@ -150,9 +141,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
   final depreciacaoController = TextEditingController();
   final vidaController = TextEditingController();
   final despreciacaoController = TextEditingController();
-  
-  
-  
+
   DateTime? dataAquisicao;
   DateTime? dataGarantia;
   final empresas = <String>[
@@ -225,6 +214,15 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              _limparCampos;
+              Navigator.pop(context);
+            },
+          )
+        ],
         title: Text(widget.patrimonio == null
             ? 'Cadastra Patrimônio'
             : 'Editar ${widget.patrimonio!.descricao}'),
@@ -236,28 +234,26 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
             child: ListView(
               padding: const EdgeInsets.only(
                   left: 12, top: 12, right: 12, bottom: 62),
-              children: [      
-
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                       const Icon(Icons.image),
-                       const Text('Adicionar Imagem'),
-                      IconButton(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.image),
+                    const Text('Adicionar Imagem'),
+                    IconButton(
                       icon: const Icon(Icons.upload),
                       onPressed: pickAndUploadImage,
-                                      ),
-                    ],
-                  ),
+                    ),                    
+                  ],
+                ),
 
 //adicionar link da imagem no storage
 
-                  Text('link: $imageUrl'),
+                Text('link: $imageUrl'),
 
                 Row(
                   children: [
-
                     Expanded(
                       child: TextFormField(
                         enabled: false,
@@ -599,7 +595,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
                   height: 12,
                 ),
                 TextFormField(
-                  controller: observacaoController,                  
+                  controller: observacaoController,
                   maxLines: 3,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -711,5 +707,9 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
         );
       },
     );
+  }
+
+  void _limparCampos() {
+    imageUrl = '';
   }
 }
