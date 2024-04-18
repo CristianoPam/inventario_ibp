@@ -214,19 +214,17 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              _limparCampos;
-              Navigator.pop(context);
-            },
-          )
-        ],
-        title: Text(widget.patrimonio == null
-            ? 'Cadastra Patrimônio'
-            : 'Editar ${widget.patrimonio!.descricao}'),
-      ),
+  leading: IconButton(
+    onPressed: () {
+      _limparCampos(); // Adicione parênteses para chamar a função _limparCampos
+      Navigator.pop(context);
+    },
+    icon: const Icon(Icons.arrow_back),
+  ),
+  title: Text(widget.patrimonio == null
+      ? 'Cadastrar Patrimônio' // Corrigido "Cadastra" para "Cadastrar"
+      : 'Editar ${widget.patrimonio!.descricao}'),
+),
       body: Stack(
         children: [
           Form(
@@ -237,20 +235,36 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
               children: [
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Icon(Icons.image),
-                    const Text('Adicionar Imagem'),
-                    IconButton(
+                    //const Icon(Icons.image),
+                    
+        
+                     SizedBox(
+                      height: 80,
+                      width: 100,                                          
+                      child: Image(image:NetworkImage(imageUrl ?? 
+                      'https://firebasestorage.googleapis.com/v0/b/inventario-ibp-2b71d.appspot.com/o/fotosdefault.png?alt=media&token=f20f8098-21ea-4da0-92f5-5bf9e8d5dac3'
+                            ),
+                      fit: BoxFit.cover,)
+                      ),
+                      const Padding(padding: EdgeInsets.all(10),),
+                       //const 
+                      imageUrl == null ? 
+                      const Text('Adicionar Imagem') :
+                      const Text('Substituir Imagem'),
+
+                      IconButton(
                       icon: const Icon(Icons.upload),
                       onPressed: pickAndUploadImage,
-                    ),                    
+                    ),
+                                        
                   ],
                 ),
 
 //adicionar link da imagem no storage
 
-                Text('link: $imageUrl'),
+               // Text('link: $imageUrl'),
 
                 Row(
                   children: [
@@ -710,6 +724,6 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
   }
 
   void _limparCampos() {
-    imageUrl = '';
+    imageUrl = null;
   }
 }
