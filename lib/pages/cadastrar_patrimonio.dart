@@ -221,9 +221,28 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
     },
     icon: const Icon(Icons.arrow_back),
   ),
-  title: Text(widget.patrimonio == null
+  centerTitle: true,
+  title: uploading ? Text('${total.round()}% enviado') :  Text(widget.patrimonio == null
       ? 'Cadastrar Patrimônio' // Corrigido "Cadastra" para "Cadastrar"
-      : 'Editar ${widget.patrimonio!.descricao}'),
+      : 'Editar ${widget.patrimonio!.descricao}'), 
+  
+      actions: [uploading
+              ? const Padding(
+                  padding: EdgeInsets.only(right: 14.0,),
+                  child: Center(
+                    child: SizedBox(
+                      width: 20.0,
+                      height: 20.0,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 3,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                )
+              : imageUrl != null ? const Icon(Icons.cloud_done): const Icon(Icons.cloud_off),
+               const Padding(padding: EdgeInsets.all(10),),  ],
+
 ),
       body: Stack(
         children: [
@@ -233,34 +252,39 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
               padding: const EdgeInsets.only(
                   left: 12, top: 12, right: 12, bottom: 62),
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    //const Icon(Icons.image),
-                    
-        
-                     SizedBox(
-                      height: 80,
-                      width: 100,                                          
-                      child: Image(image:NetworkImage(imageUrl ?? 
-                      'https://firebasestorage.googleapis.com/v0/b/inventario-ibp-2b71d.appspot.com/o/fotosdefault.png?alt=media&token=f20f8098-21ea-4da0-92f5-5bf9e8d5dac3'
-                            ),
-                      fit: BoxFit.cover,)
-                      ),
-                      const Padding(padding: EdgeInsets.all(10),),
-                       //const 
-                      imageUrl == null ? 
-                      const Text('Adicionar Imagem') :
-                      const Text('Substituir Imagem'),
-
-                      IconButton(
-                      icon: const Icon(Icons.upload),
-                      onPressed: pickAndUploadImage,
-                    ),
-                                        
-                  ],
-                ),
+               Row(
+  crossAxisAlignment: CrossAxisAlignment.center,
+  mainAxisAlignment: MainAxisAlignment.start,
+  children: [
+    SizedBox(
+      height: 80,
+      width: 100,
+      child: imageUrl != null
+          ? Image.network(
+              imageUrl!,
+              fit: BoxFit.cover,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
+                  ),
+                );
+              },
+            )
+          : const Image(image:NetworkImage('https://firebasestorage.googleapis.com/v0/b/inventario-ibp-2b71d.appspot.com/o/fotosdefault.png?alt=media&token=f20f8098-21ea-4da0-92f5-5bf9e8d5dac3')),
+    ),
+    const Padding(padding: EdgeInsets.all(10)),
+    Text(imageUrl == null ? 'Adicionar Imagem' : 'Substituir Imagem'),
+    IconButton(
+      icon: const Icon(Icons.upload),
+      onPressed: pickAndUploadImage,
+    ),
+  ],
+),
 
 //adicionar link da imagem no storage
 
@@ -279,8 +303,11 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
                           }
                           return null;
                         },
+                        style: const TextStyle(color: Colors.black,fontSize: 20),
                         decoration: const InputDecoration(
-                          label: Text('Código'),
+                          label: Text('Código'),                                                  
+                          enabledBorder: OutlineInputBorder(),  
+                          
                         ),
                       ),
                     ),
@@ -299,6 +326,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
                         },
                         decoration: const InputDecoration(
                           label: Text('Número de série'),
+                          enabledBorder: OutlineInputBorder()
                         ),
                       ),
                     ),
@@ -318,6 +346,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
                   },
                   decoration: const InputDecoration(
                     label: Text('Descrição'),
+                    enabledBorder: OutlineInputBorder()
                   ),
                 ),
                 const SizedBox(
@@ -336,6 +365,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
                         },
                         decoration: const InputDecoration(
                           label: Text('Grupo de bens'),
+                          enabledBorder: OutlineInputBorder()
                         ),
                         onTap: () {
                           _showDialog(
@@ -361,6 +391,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
                         },
                         decoration: const InputDecoration(
                           label: Text('Empresa'),
+                          enabledBorder: OutlineInputBorder()
                         ),
                       ),
                     ),
@@ -382,6 +413,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
                         },
                         decoration: const InputDecoration(
                           label: Text('Centro de Custo'),
+                          enabledBorder: OutlineInputBorder()
                         ),
                         onTap: () {
                           _showDialog(
@@ -407,6 +439,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
                         },
                         decoration: const InputDecoration(
                           label: Text('Localização'),
+                          enabledBorder: OutlineInputBorder()
                         ),
                         onTap: () {
                           _showDialog(
@@ -432,6 +465,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
                   },
                   decoration: const InputDecoration(
                     label: Text('Fornecedor'),
+                    enabledBorder: OutlineInputBorder()
                   ),
                   onTap: () {
                     _showDialog(
@@ -457,6 +491,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
                         },
                         decoration: const InputDecoration(
                           label: Text('Data de aquisição'),
+                          enabledBorder: OutlineInputBorder()
                         ),
                         onTap: () async {
                           final DateTime? data = await showDatePicker(
@@ -489,6 +524,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
                         },
                         decoration: const InputDecoration(
                           label: Text('Data de garantia'),
+                          enabledBorder: OutlineInputBorder()
                         ),
                         onTap: () async {
                           final DateTime? data = await showDatePicker(
@@ -522,6 +558,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
                   },
                   decoration: const InputDecoration(
                     label: Text('Responsável'),
+                    enabledBorder: OutlineInputBorder()
                   ),
                   onTap: () {
                     _showDialog(
@@ -548,6 +585,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
                         },
                         decoration: const InputDecoration(
                           label: Text('Valor do bem'),
+                          enabledBorder: OutlineInputBorder()
                         ),
                       ),
                     ),
@@ -565,6 +603,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
                         },
                         decoration: const InputDecoration(
                           label: Text('Vida útil'),
+                          enabledBorder: OutlineInputBorder()
                         ),
                         onTap: () {
                           _showDialog(
@@ -593,6 +632,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
                         },
                         decoration: const InputDecoration(
                           label: Text('Depreciação'),
+                          enabledBorder: OutlineInputBorder()
                         ),
                         onTap: () {
                           _showDialog(
@@ -619,6 +659,7 @@ class _NovoPatrimonioPageState extends State<NovoPatrimonioPage> {
                   },
                   decoration: const InputDecoration(
                     label: Text('Observações'),
+                    enabledBorder: OutlineInputBorder()
                   ),
                 ),
                 const SizedBox(
