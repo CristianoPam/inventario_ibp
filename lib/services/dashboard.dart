@@ -108,20 +108,22 @@ class _PatrimoniosPieChartState extends State<PatrimoniosPieChart> {
     }).toList();
   }
 
-  Color _getColor(String key) {
-    switch (key) {
-      case 'Informática':
-        return Colors.blue;
-      case 'Maquinário':
-        return Colors.green;
-      case 'Veículos':
-        return Colors.red;
-      case 'Móveis Externos':
-        return Colors.yellow;
-      case 'Diversos':
-        return Colors.purple;
-      default:
-        return Colors.grey;
-    }
+ Color _getColor(String key) {
+  switch (key) {
+    case 'Informática':
+      return const Color(0xFF2D8BBA); // Azul específico 1
+    case 'Maquinário':
+      return const Color(0xFF41B8D5); // Azul específico 2
+    case 'Veículos':
+      return const Color(0xFF2F5F98); // Azul específico 3
+    case 'Móveis Externos':
+      return const Color(0xFF31356E); // Azul específico 4
+    case 'Diversos':
+      return const Color(0xFF90CAF9); // Azul claro padrão (Blue 200)
+    default:
+      return const Color(0xFFB0BEC5); // Azul acinzentado (Blue Grey 200)
   }
 }
+
+}
+
