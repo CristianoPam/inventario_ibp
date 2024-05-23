@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:inventario_ibp/pages/relatorios_pages.dart';
 import 'package:inventario_ibp/pages/home_page.dart';
-import 'package:inventario_ibp/pages/relatorios_page.dart';
+
 
 
 import 'settings_page.dart';
@@ -51,7 +52,7 @@ class _PagesState extends State<Pages> {
       ),
       body: <Widget>[
         const Homepage(),
-        const RelatorioPage(),                       
+        const RelatoriosPages(),                       
         const SettingsPage(),
       ][currentPageIndex],
     );

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:inventario_ibp/services/pdf_service.dart';
 
-class PatrimoniosPieChart extends StatefulWidget {
-  const PatrimoniosPieChart({super.key});
+class RelatoriosPages extends StatefulWidget {
+  const RelatoriosPages({super.key});
 
   @override
-  _PatrimoniosPieChartState createState() => _PatrimoniosPieChartState();
+  _RelatoriosPagesState createState() => _RelatoriosPagesState();
 }
 
-class _PatrimoniosPieChartState extends State<PatrimoniosPieChart> {
+class _RelatoriosPagesState extends State<RelatoriosPages> {
   Map<String, int> _data = {
     'Informática': 0,
     'Maquinário': 0,
@@ -17,6 +18,8 @@ class _PatrimoniosPieChartState extends State<PatrimoniosPieChart> {
     'Móveis Externos': 0,
     'Diversos': 0,
   };
+
+  final EmsPdfService emspdfservice = EmsPdfService();
 
   @override
   void initState() {
@@ -26,9 +29,8 @@ class _PatrimoniosPieChartState extends State<PatrimoniosPieChart> {
 
   Future<void> _fetchData() async {
     try {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('patrimonios')
-          .get();
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('patrimonios').get();
 
       Map<String, int> tempData = {
         'Informática': 0,
@@ -69,13 +71,13 @@ class _PatrimoniosPieChartState extends State<PatrimoniosPieChart> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      'Distribuição dos \n Patrimônios por Grupo',
+                      'Relatório Geral',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,                        
+                        fontWeight: FontWeight.bold,
                       ),
-                                          ),
+                    ),
                     const SizedBox(height: 30),
                     AspectRatio(
                       aspectRatio: 1,
@@ -85,6 +87,32 @@ class _PatrimoniosPieChartState extends State<PatrimoniosPieChart> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 40.0),
+                    SizedBox(
+                      height: 40,
+                      width: 130,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF2F5F98),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20), // Adiciona padding
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                20), // Define a borda arredondada
+                          ),
+                        ),
+                        onPressed: () async {
+                          // Gera o PDF ao pressionar o botão
+                          final data = await emspdfservice.generateEMSPDF();
+                          emspdfservice.savePdfFile("IBP Relatório", data);
+                        },
+                        child: const Text(
+                          'GERAR',
+                          style: TextStyle(color: Colors.white, fontSize: 14),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20.0),
                   ],
                 ),
               ),
@@ -108,22 +136,20 @@ class _PatrimoniosPieChartState extends State<PatrimoniosPieChart> {
     }).toList();
   }
 
- Color _getColor(String key) {
-  switch (key) {
-    case 'Informática':
-      return const Color(0xFF2D8BBA); // Azul específico 1
-    case 'Maquinário':
-      return const Color(0xFF41B8D5); // Azul específico 2
-    case 'Veículos':
-      return const Color(0xFF2F5F98); // Azul específico 3
-    case 'Móveis Externos':
-      return const Color(0xFF31356E); // Azul específico 4
-    case 'Diversos':
-      return const Color(0xFF90CAF9); // Azul claro padrão (Blue 200)
-    default:
-      return const Color(0xFFB0BEC5); // Azul acinzentado (Blue Grey 200)
+  Color _getColor(String key) {
+    switch (key) {
+      case 'Informática':
+        return const Color(0xFF2D8BBA); // Azul específico 1
+      case 'Maquinário':
+        return const Color(0xFF41B8D5); // Azul específico 2
+      case 'Veículos':
+        return const Color(0xFF2F5F98); // Azul específico 3
+      case 'Móveis Externos':
+        return const Color(0xFF31356E); // Azul específico 4
+      case 'Diversos':
+        return const Color(0xFF90CAF9); // Azul claro padrão (Blue 200)
+      default:
+        return const Color(0xFFB0BEC5); // Azul acinzentado (Blue Grey 200)
+    }
   }
 }
-
-}
-
