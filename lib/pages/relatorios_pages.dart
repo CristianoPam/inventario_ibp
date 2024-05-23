@@ -60,7 +60,7 @@ class _RelatoriosPagesState extends State<RelatoriosPages> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Relatórios'),
+        //title: const Text('Relatórios'),
       ),
       body: Center(
         child: _data.isEmpty
@@ -74,20 +74,21 @@ class _RelatoriosPagesState extends State<RelatoriosPages> {
                       'Relatório Geral',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        //fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 100),
                     AspectRatio(
-                      aspectRatio: 1,
+                      aspectRatio: 1.65,
                       child: PieChart(
                         PieChartData(
+                          sectionsSpace: 0, // Remover espaço entre as fatias                          
                           sections: _buildPieChartSections(),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 40.0),
+                    const SizedBox(height: 90.0),
                     SizedBox(
                       height: 40,
                       width: 130,
@@ -124,13 +125,15 @@ class _RelatoriosPagesState extends State<RelatoriosPages> {
     return _data.entries.map((entry) {
       return PieChartSectionData(
         color: _getColor(entry.key),
-        value: entry.value.toDouble(),
-        title: '${entry.key} (${entry.value})',
-        radius: 85,
+        value: entry.value.toDouble() ,
+        title: '${entry.key} \n (${entry.value})',
+        radius: 50,
+        titlePositionPercentageOffset: 1.75, // Colocar a legenda fora da fatia              
         titleStyle: const TextStyle(
-          fontSize: 16,
+          fontSize: 13,
           fontWeight: FontWeight.bold,
           color: Colors.black87,
+
         ),
       );
     }).toList();
