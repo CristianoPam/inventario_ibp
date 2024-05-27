@@ -83,11 +83,7 @@ class _RelatoriosPagesState extends State<RelatoriosPages> {
                       aspectRatio: 1.65,
                       child: PieChart(
                         PieChartData(
-<<<<<<< HEAD
                           sectionsSpace: 0, // Remover espaço entre as fatias
-=======
-                          sectionsSpace: 0, // Remover espaço entre as fatias                          
->>>>>>> ad85970ab3ae7c7fa3d8a9dc5602cc643b086d2f
                           sections: _buildPieChartSections(),
                         ),
                       ),
@@ -149,22 +145,14 @@ class _RelatoriosPagesState extends State<RelatoriosPages> {
       final percentage = (entry.value / total) * 100;
       return PieChartSectionData(
         color: _getColor(entry.key),
-<<<<<<< HEAD
         value: percentage,
         title: '${entry.key} \n (${percentage.toStringAsFixed(1)}%)',
         radius: 50,
         titlePositionPercentageOffset: 1.75, // Colocar a legenda fora da fatia
-=======
-        value: entry.value.toDouble() ,
-        title: '${entry.key} \n (${entry.value})',
-        radius: 50,
-        titlePositionPercentageOffset: 1.75, // Colocar a legenda fora da fatia              
->>>>>>> ad85970ab3ae7c7fa3d8a9dc5602cc643b086d2f
         titleStyle: const TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.bold,
           color: Colors.black87,
-
         ),
       );
     }).toList();
