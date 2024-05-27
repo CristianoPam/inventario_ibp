@@ -60,13 +60,13 @@ class _RelatoriosPagesState extends State<RelatoriosPages> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Relatórios'),
+        //title: const Text('Relatórios'),
       ),
       body: Center(
         child: _data.isEmpty
             ? const CircularProgressIndicator()
             : SingleChildScrollView(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -74,20 +74,21 @@ class _RelatoriosPagesState extends State<RelatoriosPages> {
                       'Relatório Geral',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        //fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 100),
                     AspectRatio(
-                      aspectRatio: 1,
+                      aspectRatio: 1.65,
                       child: PieChart(
                         PieChartData(
+                          sectionsSpace: 0, // Remover espaço entre as fatias
                           sections: _buildPieChartSections(),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 40.0),
+                    const SizedBox(height: 90.0),
                     SizedBox(
                       height: 40,
                       width: 130,
@@ -107,12 +108,12 @@ class _RelatoriosPagesState extends State<RelatoriosPages> {
                           emspdfservice.savePdfFile("IBP Relatório", data);
                         },
                         child: const Text(
-                          'GERAR',
+                          'GERAR PDF',
                           style: TextStyle(color: Colors.white, fontSize: 14),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20.0),
+                    const SizedBox(height: 100.0),
                   ],
                 ),
               ),
@@ -121,14 +122,35 @@ class _RelatoriosPagesState extends State<RelatoriosPages> {
   }
 
   List<PieChartSectionData> _buildPieChartSections() {
+    final total = _data.values.reduce((a, b) => a + b);
+    
+    if (total == 0) {
+      return [
+        PieChartSectionData(
+          color: Colors.grey,
+          value: 100,
+          title: 'Sem dados',
+          radius: 50,
+          titlePositionPercentageOffset: 1.75,
+          titleStyle: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+      ];
+    }
+
     return _data.entries.map((entry) {
+      final percentage = (entry.value / total) * 100;
       return PieChartSectionData(
         color: _getColor(entry.key),
-        value: entry.value.toDouble(),
-        title: '${entry.key} (${entry.value})',
-        radius: 85,
+        value: percentage,
+        title: '${entry.key} \n (${percentage.toStringAsFixed(1)}%)',
+        radius: 50,
+        titlePositionPercentageOffset: 1.75, // Colocar a legenda fora da fatia
         titleStyle: const TextStyle(
-          fontSize: 16,
+          fontSize: 13,
           fontWeight: FontWeight.bold,
           color: Colors.black87,
         ),
